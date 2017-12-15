@@ -23,7 +23,7 @@ class MapVC: UIViewController {
      */
     
     var locationManager = CLLocationManager()
-    
+    let authorizationStatus = CLLocationManager.authorizationStatus()
     
     /*
      Functions
@@ -34,8 +34,15 @@ class MapVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        // Set MapView Delegate.
         mapView.delegate = self
+        
+        // Set LocationManager Delegate.
         locationManager.delegate = self
+        
+        // Call to verify if we have access to location from user.
+        configureLocationServices()
         
     } // END View Did Load
     
@@ -50,13 +57,45 @@ class MapVC: UIViewController {
     
 } // END Class.
 
+
+/*
+ Extensions
+ */
+
+
+// MKMapViewDelegate Extension.
 extension MapVC: MKMapViewDelegate {
     
-}
+} // End MKMapViewDelegate Extension.
 
+
+// CLLocationManagerDelegate Extension.
 extension MapVC: CLLocationManagerDelegate {
     
-}
+    /*
+     Functions
+     */
+    
+    
+    // Configure Location Services Function.
+        //-> Will check if we have permission for location, if so it will return location.
+            // If not, it will request those services.
+    func configureLocationServices() {
+        
+        // .notDetermined is either user said no or the app doesn't know yet.
+        if authorizationStatus == .notDetermined {
+            
+            // requestAlways will allow location wether in app or not.
+            locationManager.requestAlwaysAuthorization()
+            
+        } else {
+            // Simply return out if authorized as nothing to do.
+            return
+        }
+        
+    } // END Configure Location Services
+    
+} // END CLLocationManagerDelegate.
 
 
 // MapVC:  
