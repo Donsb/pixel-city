@@ -17,6 +17,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
      */
     
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var pullUpView: UIView!
+    @IBOutlet weak var pullUpViewHeightConstraint: NSLayoutConstraint!
     
     /*
      Instance Variables
@@ -25,6 +27,9 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     var locationManager = CLLocationManager()
     let authorizationStatus = CLLocationManager.authorizationStatus()
     let regionRadius: Double = 1000
+    var screenSize = UIScreen.main.bounds
+    var spinner: UIActivityIndicatorView?
+    var progressLbl: UILabel?
     
     /*
      Functions
@@ -54,6 +59,43 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         doubleTap.delegate = self
         mapView.addGestureRecognizer(doubleTap)
     } // END Double Tap
+    
+    
+    /* Add Swipe Function */
+    func addSwipe() {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(animateViewDown))
+        swipe.direction = .down
+        pullUpView.addGestureRecognizer(swipe)
+    } // END Swipe Function.
+    
+    
+    /* Animate View Down Function. */
+    @objc func animateViewDown() {
+        pullUpViewHeightConstraint.constant = 0
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    } // END Animate View Down.
+    
+    
+    /* Animate View Function. */
+    func animateView() {
+        
+        pullUpViewHeightConstraint.constant = 300
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    } // END Animate View Function.
+    
+    
+    /* Add Spinner Function */
+    func addSpinner() {
+        spinner = UIActivityIndicatorView()
+        spinner?.center = CGPoint(x: (screenSize.width / 2) - ((spinner?.frame.width)! / 2), y: 150)
+        spinner?.activityIndicatorViewStyle = .whiteLarge
+        spinner?.color = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
+        spinner?.startAnimating()
+    } // END Add Spinner.
     
     
     /* Center Button Was Pressed Function. */
@@ -110,6 +152,8 @@ extension MapVC: MKMapViewDelegate {
     /* Drop Pin Function. */
     @objc func dropPin(sender: UITapGestureRecognizer) {
         removePin() // Clear any pin on map before adding new one.
+        animateView()
+        addSwipe()
         
         let touchPoint = sender.location(in: mapView)
             // Converts Screen position to a GPS coordinate
@@ -173,7 +217,6 @@ extension MapVC: CLLocationManagerDelegate {
 
 
 // MapVC:  
-
 
 
 

@@ -44,7 +44,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aah-UZ-vIo">
-                                <rect key="frame" x="325" y="708" width="50" height="50"/>
+                                <rect key="frame" x="320" y="707" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="71b-8a-Raa"/>
                                     <constraint firstAttribute="width" constant="50" id="zZV-8f-4OS"/>
@@ -55,23 +55,25 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AIU-Np-CQ8">
-                                <rect key="frame" x="0.0" y="647" width="375" height="0.0"/>
+                                <rect key="frame" x="0.0" y="777" width="375" height="1"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="uP2-UT-Lcy"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.84465640779999995" green="0.51457053419999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="AIU-Np-CQ8" firstAttribute="top" secondItem="Aah-UZ-vIo" secondAttribute="bottom" constant="-111" id="7VP-2k-gC5"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AIU-Np-CQ8" secondAttribute="bottom" id="7Fy-1e-qew"/>
                             <constraint firstItem="46A-MI-ugO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DeQ-ls-HoJ"/>
                             <constraint firstItem="AIU-Np-CQ8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="WCv-95-Gyz"/>
+                            <constraint firstItem="AIU-Np-CQ8" firstAttribute="top" secondItem="Aah-UZ-vIo" secondAttribute="bottom" constant="20" id="Wpg-Rw-IdH"/>
                             <constraint firstItem="AIU-Np-CQ8" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="btZ-NK-cHd"/>
                             <constraint firstItem="yIk-cL-TwY" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ik8-zg-XVh"/>
                             <constraint firstItem="yIk-cL-TwY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oy8-SI-UZC"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Aah-UZ-vIo" secondAttribute="bottom" constant="20" id="qgq-Bw-xcB"/>
-                            <constraint firstItem="AIU-Np-CQ8" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-131" id="ryE-ZG-wSf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aah-UZ-vIo" secondAttribute="trailing" constant="5" id="q8k-Mx-1yz"/>
                             <constraint firstItem="yIk-cL-TwY" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="vwE-ON-gbG"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aah-UZ-vIo" secondAttribute="trailing" id="xbe-9m-FFe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="46A-MI-ugO" secondAttribute="bottom" id="xoF-oq-n4U"/>
+                            <constraint firstItem="AIU-Np-CQ8" firstAttribute="bottom" secondItem="46A-MI-ugO" secondAttribute="bottom" id="xoF-oq-n4U"/>
                             <constraint firstItem="46A-MI-ugO" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="yHW-7h-SC4"/>
                             <constraint firstItem="46A-MI-ugO" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zA2-Q8-T4s"/>
                         </constraints>
@@ -79,6 +81,8 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="46A-MI-ugO" id="6o9-Ph-MkF"/>
+                        <outlet property="pullUpView" destination="AIU-Np-CQ8" id="BtO-Wl-NkD"/>
+                        <outlet property="pullUpViewHeightConstraint" destination="uP2-UT-Lcy" id="zxa-QH-uZm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
