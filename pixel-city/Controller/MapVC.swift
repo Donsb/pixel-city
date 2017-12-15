@@ -24,13 +24,17 @@ class MapVC: UIViewController {
     
     var locationManager = CLLocationManager()
     let authorizationStatus = CLLocationManager.authorizationStatus()
+    let regionRadius: Double = 1000
     
     /*
      Functions
      */
     
     
-    // View Did Load Function.
+    /*
+     View Did Load Function.
+     */
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -47,10 +51,15 @@ class MapVC: UIViewController {
     } // END View Did Load
     
     
-    // Center Button Was Pressed Function.
+    /*
+     Center Button Was Pressed Function.
+     */
+    
     @IBAction func centerMapBtnWasPressed(_ sender: Any) {
         
-        
+        if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+            centerMapOnUserLocation()
+        }
         
     } // END Center Button Was Pressed.
     
@@ -63,13 +72,43 @@ class MapVC: UIViewController {
  */
 
 
-// MKMapViewDelegate Extension.
+/*
+ MKMapViewDelegate Extension.
+ */
+
 extension MapVC: MKMapViewDelegate {
+    
+    /*
+     Functions
+     */
+    
+    
+    /* Center Map On User Location Function. */
+    
+    func centerMapOnUserLocation() {
+        
+        /* Start by creating a constant of the user's location.  If locationManager hasn't determined
+         the user's location yet, it will return out of this function until locationManager has it.
+         */
+        guard let coordinate = locationManager.location?.coordinate else { return }
+        
+        // Set up the Region we want to zoom into.
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        
+        // Set region on Map View.
+        mapView.setRegion(coordinateRegion, animated: true)
+        
+    } // END Center Map On User Location
+    
     
 } // End MKMapViewDelegate Extension.
 
 
-// CLLocationManagerDelegate Extension.
+
+/*
+ CLLocationManagerDelegate Extension.
+ */
+
 extension MapVC: CLLocationManagerDelegate {
     
     /*
@@ -78,8 +117,10 @@ extension MapVC: CLLocationManagerDelegate {
     
     
     // Configure Location Services Function.
-        //-> Will check if we have permission for location, if so it will return location.
-            // If not, it will request those services.
+        /* Will check if we have permission for location, if so it will return location.
+            If not, it will request those services.
+        */
+    
     func configureLocationServices() {
         
         // .notDetermined is either user said no or the app doesn't know yet.
@@ -89,11 +130,26 @@ extension MapVC: CLLocationManagerDelegate {
             locationManager.requestAlwaysAuthorization()
             
         } else {
+            
             // Simply return out if authorized as nothing to do.
             return
+            
         }
         
     } // END Configure Location Services
+    
+    
+    // Did Change Authorization Status Function.
+        /*
+        Called Anytime the mapView changes Authorization (Permission)
+        */
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        centerMapOnUserLocation()
+        
+    } // END Did Change Authorization Status.
+    
     
 } // END CLLocationManagerDelegate.
 

@@ -40,10 +40,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>This app requires your location to pull photos from Flicker.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This app requires your location to pull photos from Flicker.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This app requires your location to pull photos from Flicker.</string>
 </dict>
 </plist>
