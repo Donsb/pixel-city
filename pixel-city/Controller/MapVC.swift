@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapVC: UIViewController {
+class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     /*
      IBOutlets
@@ -31,36 +31,37 @@ class MapVC: UIViewController {
      */
     
     
-    /*
-     View Did Load Function.
-     */
+    /* View Did Load Function. */
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        // Set MapView Delegate.
+            // Set MapView Delegate.
         mapView.delegate = self
-        
-        // Set LocationManager Delegate.
+            // Set LocationManager Delegate.
         locationManager.delegate = self
-        
-        // Call to verify if we have access to location from user.
+            // Call to verify if we have access to location from user.
         configureLocationServices()
-        
+            // Add Double Tap Function to Drop Pin.
+        doubleTap()
     } // END View Did Load
     
     
-    /*
-     Center Button Was Pressed Function.
-     */
+    /* Double Tap Function. */
+    
+    func doubleTap() {
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(dropPin(sender:)))
+        doubleTap.numberOfTapsRequired = 2
+        doubleTap.delegate = self
+        mapView.addGestureRecognizer(doubleTap)
+    } // END Double Tap
+    
+    
+    /* Center Button Was Pressed Function. */
     
     @IBAction func centerMapBtnWasPressed(_ sender: Any) {
-        
         if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
             centerMapOnUserLocation()
         }
-        
     } // END Center Button Was Pressed.
     
     
@@ -78,76 +79,78 @@ class MapVC: UIViewController {
 
 extension MapVC: MKMapViewDelegate {
     
-    /*
-     Functions
-     */
-    
-    
     /* Center Map On User Location Function. */
     
     func centerMapOnUserLocation() {
-        
         /* Start by creating a constant of the user's location.  If locationManager hasn't determined
          the user's location yet, it will return out of this function until locationManager has it.
          */
         guard let coordinate = locationManager.location?.coordinate else { return }
-        
         // Set up the Region we want to zoom into.
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, regionRadius * 2.0, regionRadius * 2.0)
-        
         // Set region on Map View.
         mapView.setRegion(coordinateRegion, animated: true)
-        
     } // END Center Map On User Location
+    
+    
+    /* Drop Pin Function. */
+    @objc func dropPin(sender: UITapGestureRecognizer) {
+        removePin() // Clear any pin on map before adding new one.
+        
+        let touchPoint = sender.location(in: mapView)
+            // Converts Screen position to a GPS coordinate
+        let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        let annotation = DropablePin(coordinate: touchCoordinate, identifier: "droppablePin")
+        mapView.addAnnotation(annotation)
+        
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(touchCoordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+    } // END Drop Pin.
+    
+    
+    /* Remove Pin Function */
+    func removePin() {
+        for annotation in mapView.annotations {
+            mapView.removeAnnotation(annotation)
+        }
+    } // END Remove Pin.
     
     
 } // End MKMapViewDelegate Extension.
 
 
 
-/*
- CLLocationManagerDelegate Extension.
- */
+/* CLLocationManagerDelegate Extension. */
 
 extension MapVC: CLLocationManagerDelegate {
     
-    /*
-     Functions
-     */
+    /* Configure Location Services Function. */
     
-    
-    // Configure Location Services Function.
-        /* Will check if we have permission for location, if so it will return location.
+        /*
+            Will check if we have permission for location, if so it will return location.
             If not, it will request those services.
         */
     
     func configureLocationServices() {
-        
         // .notDetermined is either user said no or the app doesn't know yet.
         if authorizationStatus == .notDetermined {
-            
             // requestAlways will allow location wether in app or not.
             locationManager.requestAlwaysAuthorization()
-            
         } else {
-            
             // Simply return out if authorized as nothing to do.
             return
-            
         }
-        
     } // END Configure Location Services
     
     
-    // Did Change Authorization Status Function.
+    /* Did Change Authorization Status Function. */
+    
         /*
-        Called Anytime the mapView changes Authorization (Permission)
+            Called Anytime the mapView changes Authorization (Permission)
         */
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
         centerMapOnUserLocation()
-        
     } // END Did Change Authorization Status.
     
     
