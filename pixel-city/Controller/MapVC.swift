@@ -95,6 +95,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         spinner?.activityIndicatorViewStyle = .whiteLarge
         spinner?.color = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
         spinner?.startAnimating()
+        pullUpView.addSubview(spinner!)
     } // END Add Spinner.
     
     
@@ -154,6 +155,7 @@ extension MapVC: MKMapViewDelegate {
         removePin() // Clear any pin on map before adding new one.
         animateView()
         addSwipe()
+        addSpinner()
         
         let touchPoint = sender.location(in: mapView)
             // Converts Screen position to a GPS coordinate
@@ -216,7 +218,7 @@ extension MapVC: CLLocationManagerDelegate {
 } // END CLLocationManagerDelegate.
 
 
-// MapVC:  
+// MapVC:
 
 
 
