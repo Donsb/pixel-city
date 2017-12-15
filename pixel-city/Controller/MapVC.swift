@@ -7,8 +7,15 @@
 //
 
 import UIKit
+import MapKit
 
 class MapVC: UIViewController {
+    
+    /*
+     IBOutlets
+     */
+    
+    @IBOutlet weak var mapView: MKMapView!
     
     /*
      Functions
@@ -19,20 +26,27 @@ class MapVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        mapView.delegate = self
         
     } // END View Did Load
     
     
-    //
+    // Center Button Was Pressed Function.
+    @IBAction func centerMapBtnWasPressed(_ sender: Any) {
+        
+        
+        
+    } // END Center Button Was Pressed.
     
     
 } // END Class.
 
+extension MapVC: MKMapViewDelegate {
+    
+}
 
 
 // MapVC:  
-
 
 
 
