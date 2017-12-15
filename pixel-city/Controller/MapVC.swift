@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapVC: UIViewController {
     
@@ -16,6 +17,13 @@ class MapVC: UIViewController {
      */
     
     @IBOutlet weak var mapView: MKMapView!
+    
+    /*
+     Instance Variables
+     */
+    
+    var locationManager = CLLocationManager()
+    
     
     /*
      Functions
@@ -27,6 +35,7 @@ class MapVC: UIViewController {
         
         super.viewDidLoad()
         mapView.delegate = self
+        locationManager.delegate = self
         
     } // END View Did Load
     
@@ -42,6 +51,10 @@ class MapVC: UIViewController {
 } // END Class.
 
 extension MapVC: MKMapViewDelegate {
+    
+}
+
+extension MapVC: CLLocationManagerDelegate {
     
 }
 
