@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Alamofire
+import AlamofireImage
 
 class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
@@ -32,6 +34,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     var progressLbl: UILabel?
     var flowLayout = UICollectionViewFlowLayout()
     var collectionView: UICollectionView?
+    var imageUrlArray = [String]()
     
     /*
      Functions
@@ -156,7 +159,12 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     } // END Center Button Was Pressed.
     
     
+
+    
+    
 } // END Class.
+
+
 
 
 /*
@@ -221,6 +229,10 @@ extension MapVC: MKMapViewDelegate {
         // Set map centered to our pin drop.
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(touchCoordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
+        
+        retreiveUrls(forAnnotation: annotation) { (true) in
+            print(self.imageUrlArray)
+        }
     } // END Drop Pin.
     
     
@@ -231,6 +243,32 @@ extension MapVC: MKMapViewDelegate {
         }
     } // END Remove Pin.
     
+    
+    /*  */
+    
+    func retreiveUrls(forAnnotation annotation: DropablePin, handler: @escaping (_ status: Bool)-> ()) {
+        
+        // Clear out our imageArray so when they choose a new pin the images of the last one is cleared.
+        imageUrlArray = []
+        
+        // Web Request
+        Alamofire.request(FLICKR_URL(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 40)).responseJSON { (response) in
+            guard let json = response.result.value as? Dictionary<String, Any> else { return }
+            do {
+                let photosDict = try json["photos"] as! Dictionary<String, Any>
+                let photosDictArray = try photosDict["photo"] as! [Dictionary<String, Any>]
+                for photo in photosDictArray {
+                    // See Pages Doc "iOS Flickr & JSON" on how to get the needed URL below.
+                    let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_z_d.jpg"
+                    // https://farm5.staticflickr.com/4646/39065500182_8f079dd558_z_d.jpg Example.
+                    self.imageUrlArray.append(postUrl)
+                }
+            } catch {
+                debugPrint(error as Any)
+            }
+            handler(true)
+        }
+    } // END Retreive URLs.
     
 }
 // End MKMapViewDelegate Extension.
@@ -318,8 +356,6 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
  at the following address: https://www.flickr.com/services/developer.
  
  */
-
-
 
 
 
