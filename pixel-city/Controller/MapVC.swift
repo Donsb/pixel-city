@@ -306,9 +306,18 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
 // END CollectionView Delegate & DataSource.
 
 
-// MapVC:  
+// MapVC:
 
 
+
+
+/*
+ 
+ NOTE:
+ You can find all the information for the Flicker API
+ at the following address: https://www.flickr.com/services/developer.
+ 
+ */
 
 
 
