@@ -58,6 +58,10 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.delegate = self
             // Set CollectionView DataSource to self.
         collectionView?.dataSource = self
+            // Add a background View so we can see it when pop up occurs.
+        collectionView?.backgroundColor = #colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1)
+            // Add CollectionView to our Pull Up View.
+        pullUpView.addSubview(collectionView!)
     } // END View Did Load
     
     
@@ -109,7 +113,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         spinner?.activityIndicatorViewStyle = .whiteLarge
         spinner?.color = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
         spinner?.startAnimating()
-        pullUpView.addSubview(spinner!)
+        collectionView?.addSubview(spinner!)
     } // END Add Spinner.
     
     
@@ -130,7 +134,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         progressLbl?.font = UIFont(name: "Avenir", size: 18)
         progressLbl?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         progressLbl?.textAlignment = .center
-        pullUpView.addSubview(progressLbl!)
+        collectionView?.addSubview(progressLbl!)
     } // END Add Preogress Lable.
     
     
@@ -293,7 +297,8 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     // Cell For Item At Index Path Function.
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell
+        return cell!
     } // Cell For Item At Index Path.
     
     
