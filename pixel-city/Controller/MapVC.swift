@@ -217,6 +217,9 @@ extension MapVC: MKMapViewDelegate {
         removeSpinner() // Removes Spinner if there is one there.
         removeLbl() // Remove Label if there is one.
         cancelAllSessions() // Cancel any downloading images if they add a new pin before the 1st was finished.
+        imageUrlArray = [] // Clear image URL array
+        imageArray = [] // Clear images from Array
+        collectionView?.reloadData() // Reload Data.
         
         animateView()
         addSwipe()
@@ -239,7 +242,7 @@ extension MapVC: MKMapViewDelegate {
                     if finished {
                         self.removeSpinner()
                         self.removeLbl()
-                        // reload collectionView
+                        self.collectionView?.reloadData()
                     }
                 })
             }
@@ -258,9 +261,6 @@ extension MapVC: MKMapViewDelegate {
     /*  */
     
     func retreiveUrls(forAnnotation annotation: DropablePin, handler: @escaping (_ status: Bool)-> ()) {
-        
-        // Clear out our imageArray so when they choose a new pin the images of the last one is cleared.
-        imageUrlArray = []
         
         // Web Request
         Alamofire.request(FLICKR_URL(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 40)).responseJSON { (response) in
@@ -285,8 +285,6 @@ extension MapVC: MKMapViewDelegate {
     /* Retreive Images Function. */
     
     func retreiveImages(handler: @escaping (_ status: Bool)-> ()) {
-        // Clear out Image Array
-        imageArray = []
         
         for url in imageUrlArray {
             Alamofire.request(url).responseImage(completionHandler: { (response) in
@@ -384,15 +382,18 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     // Number Of Items In Section Function.
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4 // This will change to an array.count later.  4 is a temp placeholder.
+        return imageArray.count
     } // END Number Of Items In Section.
     
     
     // Cell For Item At Index Path Function.
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell
-        return cell!
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
+        let imageFromIndex = imageArray[indexPath.row]
+        let imageView = UIImageView(image: imageFromIndex)
+        cell.addSubview(imageView)
+        return cell
     } // Cell For Item At Index Path.
     
     
