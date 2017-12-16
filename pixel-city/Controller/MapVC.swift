@@ -30,6 +30,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     var screenSize = UIScreen.main.bounds
     var spinner: UIActivityIndicatorView?
     var progressLbl: UILabel?
+    var flowLayout = UICollectionViewFlowLayout()
+    var collectionView: UICollectionView?
     
     /*
      Functions
@@ -48,6 +50,14 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         configureLocationServices()
             // Add Double Tap Function to Drop Pin.
         doubleTap()
+            // Instantiate Collection View.
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
+            // Set up Collection View Cell to use our custom cell class.
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+            // Set CollectionView delegate to self.
+        collectionView?.delegate = self
+            // Set CollectionView DataSource to self.
+        collectionView?.dataSource = self
     } // END View Did Load
     
     
@@ -116,7 +126,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     func addProgressLbl() {
         progressLbl = UILabel()
-        progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 100, y: 175, width: 200, height: 40)
+        progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 120, y: 175, width: 240, height: 40)
         progressLbl?.font = UIFont(name: "Avenir", size: 18)
         progressLbl?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         progressLbl?.textAlignment = .center
@@ -218,7 +228,8 @@ extension MapVC: MKMapViewDelegate {
     } // END Remove Pin.
     
     
-} // End MKMapViewDelegate Extension.
+}
+// End MKMapViewDelegate Extension.
 
 
 
@@ -256,11 +267,41 @@ extension MapVC: CLLocationManagerDelegate {
     } // END Did Change Authorization Status.
     
     
-} // END CLLocationManagerDelegate.
+}
+// END CLLocationManagerDelegate.
 
 
-// MapVC: 
 
+/* CollectionView Delegate & DataSource Extension */
+
+extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    // Number Of Sections Function.
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    } // END Number Of Sections.
+    
+    
+    // Number Of Items In Section Function.
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 4 // This will change to an array.count later.  4 is a temp placeholder.
+    } // END Number Of Items In Section.
+    
+    
+    // Cell For Item At Index Path Function.
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell()
+    } // Cell For Item At Index Path.
+    
+    
+}
+// END CollectionView Delegate & DataSource.
+
+
+// MapVC:  
 
 
 
