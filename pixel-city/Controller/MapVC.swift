@@ -62,6 +62,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     /* Add Swipe Function */
+    
     func addSwipe() {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(animateViewDown))
         swipe.direction = .down
@@ -70,6 +71,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     /* Animate View Down Function. */
+    
     @objc func animateViewDown() {
         pullUpViewHeightConstraint.constant = 0
         UIView.animate(withDuration: 0.3) {
@@ -79,6 +81,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     /* Animate View Function. */
+    
     func animateView() {
         
         pullUpViewHeightConstraint.constant = 300
@@ -89,6 +92,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     
     /* Add Spinner Function */
+    
     func addSpinner() {
         spinner = UIActivityIndicatorView()
         spinner?.center = CGPoint(x: (screenSize.width / 2) - ((spinner?.frame.width)! / 2), y: 150)
@@ -97,6 +101,36 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         spinner?.startAnimating()
         pullUpView.addSubview(spinner!)
     } // END Add Spinner.
+    
+    
+    /* Remove Spinner Function */
+    
+    func removeSpinner() {
+        if spinner != nil {
+            spinner?.removeFromSuperview()
+        }
+    } // END Remove Spinner.
+    
+    
+    /* Add Preogress Lable Function. */
+    
+    func addProgressLbl() {
+        progressLbl = UILabel()
+        progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 100, y: 175, width: 200, height: 40)
+        progressLbl?.font = UIFont(name: "Avenir", size: 18)
+        progressLbl?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        progressLbl?.textAlignment = .center
+        pullUpView.addSubview(progressLbl!)
+    } // END Add Preogress Lable.
+    
+    
+    /* Remove Progress Label Function. */
+    
+    func removeLbl() {
+        if progressLbl != nil {
+            progressLbl?.removeFromSuperview()
+        }
+    } // END Remove Label.
     
     
     /* Center Button Was Pressed Function. */
@@ -123,6 +157,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 extension MapVC: MKMapViewDelegate {
     
     /* View for Annotation Function */
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         // Code so the user location isn't changed, just our pins.
@@ -135,6 +170,7 @@ extension MapVC: MKMapViewDelegate {
         pinAnnotation.animatesDrop = true
         return pinAnnotation
     } // End View For Annotation.
+    
     
     /* Center Map On User Location Function. */
     
@@ -151,11 +187,16 @@ extension MapVC: MKMapViewDelegate {
     
     
     /* Drop Pin Function. */
+    
     @objc func dropPin(sender: UITapGestureRecognizer) {
         removePin() // Clear any pin on map before adding new one.
+        removeSpinner() // Removes Spinner if there is one there.
+        removeLbl() // Remove Label if there is one.
+        
         animateView()
         addSwipe()
         addSpinner()
+        addProgressLbl()
         
         let touchPoint = sender.location(in: mapView)
             // Converts Screen position to a GPS coordinate
@@ -218,7 +259,7 @@ extension MapVC: CLLocationManagerDelegate {
 } // END CLLocationManagerDelegate.
 
 
-// MapVC:
+// MapVC: 
 
 
 
