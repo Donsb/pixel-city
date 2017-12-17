@@ -64,6 +64,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.dataSource = self
             // Add a background View so we can see it when pop up occurs.
         collectionView?.backgroundColor = #colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1)
+            // Set SourceRect from 3D Touch to collectionView.
+        registerForPreviewing(with: self, sourceView: collectionView!)
             // Add CollectionView to our Pull Up View.
         pullUpView.addSubview(collectionView!)
     } // END View Did Load
@@ -410,6 +412,47 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
 // END CollectionView Delegate & DataSource.
 
 
+
+/* 3D Touch Extension. */
+
+extension MapVC: UIViewControllerPreviewingDelegate {
+    
+    /* View Controller For Location Function */
+        //-> Full Puch to present PopVC.
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = collectionView?.indexPathForItem(at: location), let cell = collectionView?.cellForItem(at: indexPath) else { return nil }
+        
+        guard let popVC = storyboard?.instantiateViewController(withIdentifier: "PopVC") as? PopVC else { return nil }
+        
+        popVC.initData(forImage: imageArray[indexPath.row])
+        
+        previewingContext.sourceRect = cell.contentView.frame
+        
+        return popVC
+    } // END View Controller For Location.
+    
+    
+    /* View Controller To Commit Function. */
+        //-> The small press to peak at the image.
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+        
+        /*
+         
+         NOTE:
+         viewControllerToCommit.  It gets it from the previewingContext function.  In that
+         one, we set up popVC.  So, here it is being passed popVC into viewControllerToCommit.
+         
+         */
+        
+    } // View Controller To Commit
+    
+    
+} // END 3D Touch Extension.
+
+
 /*
  
  NOTE:
@@ -417,37 +460,6 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
  at the following address: https://www.flickr.com/services/developer.
  
  */
-
-
-// MapVC:  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

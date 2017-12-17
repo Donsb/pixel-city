@@ -64,26 +64,7 @@ class PopVC: UIViewController, UIGestureRecognizerDelegate {
         dismiss(animated: true, completion: nil)
     } // END Screen Was Double Tapped
     
-}
-
-
-
-// PopVC: 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+} // END Class.
 
 
 
