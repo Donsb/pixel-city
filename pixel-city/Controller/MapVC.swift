@@ -94,6 +94,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func animateViewDown() {
         cancelAllSessions()
+        imageUrlArray = [] // Clear image URL array
+        imageArray = [] // Clear images from Array
         pullUpViewHeightConstraint.constant = 0
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
